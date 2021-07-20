@@ -1,0 +1,20 @@
+.piece {
+  --small: 30%;
+  --medium: 50%;
+  --big: 80%;
+  border-radius: 100%;
+}
+
+.piece[data-piece="null"] {
+  display: none;
+}
+
+.piece[data-piece="1"] {
+  width: var(--small);
+}
+.piece[data-piece="2"] {
+  width: var(--medium);
+}
+.piece[data-piece="3"] {
+  width: var(--big);
+}

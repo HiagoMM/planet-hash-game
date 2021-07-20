@@ -1,0 +1,10 @@
+.sidebar-container {
+  width: calc(var(--board-size) / 4.13);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  background: var(--board-color);
+  padding: 3.1rem;
+  border-radius: 13px;
+}

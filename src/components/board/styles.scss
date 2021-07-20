@@ -1,0 +1,19 @@
+.board-container {
+  .board {
+    font-size: 1rem;
+    width: var(--board-size);
+    height: var(--board-size);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.7em;
+  }
+  .piece-wrapper {
+    display: grid;
+    place-items: center;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+    border-radius: 5px;
+    background-color: var(--board-color);
+    width: calc(var(--board-size) / 3 - 0.7em);
+    height: calc(var(--board-size) / 3 - 0.7em);
+  }
+}

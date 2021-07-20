@@ -1,0 +1,15 @@
+.pieces-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-items: center;
+  gap: 1.5rem;
+  .piece {
+    width: 90%;
+    cursor: pointer;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+  }
+  .piece[data-black-white="true"] {
+    filter: grayscale(100%);
+    cursor: default;
+  }
+}
