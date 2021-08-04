@@ -33,6 +33,12 @@ const gameReducer = (state: State, action: Actions): State => {
         ...state,
         [action.payload.player + "Pieces"]: [
           {
+            id: `${action.payload.player}-0`,
+            value: 1,
+            player: action.payload.player,
+            planet: action.payload.piece,
+          },
+          {
             id: `${action.payload.player}-1`,
             value: 1,
             player: action.payload.player,

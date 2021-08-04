@@ -1,6 +1,6 @@
 .sidebar-container {
   width: calc(var(--board-size) / 4.13);
-  height: calc(var(--board-size) - 6rem);
+  min-height: calc(var(--board-size) - 6rem);
   display: flex;
   flex-direction: column;
   align-items: center;
