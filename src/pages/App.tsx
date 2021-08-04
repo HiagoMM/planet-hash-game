@@ -36,26 +36,41 @@ function App() {
   };
 
   useEffect(() => {
-    const start = async () => {
-      const planet1 = await showSwal("Player one piece");
-      dispatch({
-        type: "startupPlayer",
-        payload: { player: "p1", piece: planet1 },
+    if (!state.win) {
+      const start = async () => {
+        const planet1 = await showSwal("Player one piece");
+        dispatch({
+          type: "startupPlayer",
+          payload: { player: "p1", piece: planet1 },
+        });
+        const planet2 = await showSwal("Player Two piece", planet1);
+
+        dispatch({
+          type: "startupPlayer",
+          payload: { player: "p2", piece: planet2 },
+        });
+      };
+      start();
+    }
+  }, [state.win]);
+
+  useEffect(() => {
+    if (state.win) {
+      MySwal.fire(
+        "Ganhou peste negra",
+        `O player ${state.turn === "p1" ? "2" : "1"} ganhou!!!`,
+        "success"
+      ).then(() => {
+        dispatch({ type: "reset" });
       });
-      const planet2 = await showSwal("Player Two piece", planet1);
-      dispatch({
-        type: "startupPlayer",
-        payload: { player: "p2", piece: planet2 },
-      });
-    };
-    start();
-  }, []);
+    }
+  }, [state]);
 
   return (
     <div className="container">
-      <SideBar pieces={state.p1Pieces} />
+      <SideBar pieces={state.p1Pieces} draggable={state.turn === "p1"} />
       <Board board={state.board} dispatch={dispatch} />
-      <SideBar pieces={state.p2Pieces} />
+      <SideBar pieces={state.p2Pieces} draggable={state.turn === "p2"} />
     </div>
   );
 }

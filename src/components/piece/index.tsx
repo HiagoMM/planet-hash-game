@@ -8,6 +8,7 @@ import P3 from "../../assets/planet-3.png";
 import P4 from "../../assets/planet-4.png";
 import P5 from "../../assets/planet-5.png";
 import P6 from "../../assets/planet-6.png";
+import { useState } from "react";
 
 const sourceMap = [
   {
@@ -44,33 +45,63 @@ const sourceMap = [
 
 interface PieceProps {
   piece: PieceInterface;
+  draggable?: boolean;
 }
 
-const Piece: React.FC<PieceProps> = ({ piece }) => {
+const Piece: React.FC<PieceProps> = ({ piece, draggable = true }) => {
+  const [style, setStyle] = useState<any>({});
+  const [startPoint, setStartPoint] = useState<any>(null);
   const getSrc = () => {
-    if (piece.planet) {
+    if (piece.planet !== undefined) {
       return sourceMap[piece.planet][piece.value];
     }
-    return piece.player === "p1" ? P1 : P5;
   };
 
   const handleDragStart = (ev: DragEvent<HTMLDivElement>) => {
-    console.log("start", piece);
     ev.dataTransfer.setData("piece", JSON.stringify(piece));
+    ev.dataTransfer.setDragImage(document.createElement("img"), 0, 0);
+    setStartPoint({ clientX: ev.clientX, clientY: ev.clientY });
+  };
+  const handleDrag = (ev: DragEvent<HTMLDivElement>) => {
+    const translation = {
+      x: ev.clientX - startPoint.clientX,
+      y: ev.clientY - startPoint.clientY,
+    };
+    if (ev.clientX !== 0 && ev.clientY !== 0) {
+      setStyle({
+        transform: `translate(${translation.x}px, ${translation.y}px)`,
+      });
+    }
+  };
+  const handleDragEnd = (ev: DragEvent<HTMLDivElement>) => {
+    setStyle({
+      transform: `translate(0px, 0px)`,
+    });
+    setStartPoint(null);
   };
 
-  const handleDrag = (ev: DragEvent<HTMLDivElement>) => {};
-
   return (
-    <img
-      draggable
-      onDragStart={handleDragStart}
-      onDrag={handleDrag}
-      alt={`Piece ${piece}`}
-      className="piece"
-      src={getSrc()}
-      data-piece={`${piece.value}`}
-    />
+    <div className="containerp">
+      <img
+        style={style}
+        alt={`Piece ${piece}`}
+        className="piece abs"
+        src={getSrc()}
+        data-drop={!startPoint}
+        data-piece={`${piece.value}`}
+      />
+      <img
+        draggable={draggable}
+        onDragStart={handleDragStart}
+        onDrag={handleDrag}
+        onDragEnd={handleDragEnd}
+        alt={`Piece ${piece}`}
+        className="piece normal"
+        src={getSrc()}
+        data-drop={!startPoint}
+        data-piece={`${piece.value}`}
+      />
+    </div>
   );
 };
 

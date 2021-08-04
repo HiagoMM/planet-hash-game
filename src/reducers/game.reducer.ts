@@ -13,11 +13,12 @@ export interface State {
   p1Pieces: PieceInterface[];
   p2Pieces: PieceInterface[];
   turn: "p1" | "p2";
+  win: boolean;
 }
 
 export interface Actions {
-  type: "play" | "startupPlayer";
-  payload: any;
+  type: "play" | "startupPlayer" | "win" | "reset";
+  payload?: any;
 }
 
 export interface PlayPayload {
@@ -87,15 +88,14 @@ const gameReducer = (state: State, action: Actions): State => {
               return actualPiece;
             })
           );
-          const newPlayerPieces = state[
-            (piece.player + "Pieces") as keyof State
-          ] as PieceInterface[];
+          const newPlayerPieces = (
+            state[(piece.player + "Pieces") as keyof State] as PieceInterface[]
+          ).filter((playerPiece) => playerPiece.id !== piece.id);
+
           return {
             ...state,
             board: newBoard,
-            [piece.player + "Pieces"]: newPlayerPieces.filter(
-              (playerPiece) => playerPiece.id !== piece.id
-            ),
+            [piece.player + "Pieces"]: newPlayerPieces,
             history: [
               ...state.history,
               `${piece.player}-${piece.value}=r${row}-c${column}`,
@@ -106,6 +106,10 @@ const gameReducer = (state: State, action: Actions): State => {
       }
 
       return state;
+    case "win":
+      return { ...state, win: true };
+    case "reset":
+      return INITIAL_STATE;
     default:
       return state;
   }
@@ -123,4 +127,5 @@ export const INITIAL_STATE: State = {
   p1Pieces: [],
   p2Pieces: [],
   turn: "p1",
+  win: false,
 };

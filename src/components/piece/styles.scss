@@ -1,8 +1,10 @@
 .piece {
-  --small: 30%;
-  --medium: 50%;
-  --big: 80%;
+  --small: 3.5rem;
+  --medium: 6.5rem;
+  --big: 10rem;
   border-radius: 100%;
+  position: relative;
+  z-index: 2;
 }
 
 .piece[data-piece="null"] {
@@ -17,4 +19,27 @@
 }
 .piece[data-piece="3"] {
   width: var(--big);
+}
+.piece[data-drop="true"] {
+  transition: transform 1s;
+}
+
+.abs {
+  position: absolute;
+  pointer-events: none;
+  opacity: 1;
+  z-index: 10000;
+  cursor: grab;
+}
+.abs:active {
+  cursor: grabbing;
+}
+
+.containerp {
+  position: relative;
+  z-index: 2;
+}
+
+.normal {
+  opacity: 0;
 }
