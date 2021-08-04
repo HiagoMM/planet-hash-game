@@ -2,6 +2,7 @@ export interface PieceInterface {
   value: 1 | 2 | 3;
   player: "p1" | "p2";
   planet?: 0 | 1 | 2 | 3 | 4 | 5;
+  id: string;
 }
 
 export type BoardType = Array<Array<PieceInterface | null>>;
@@ -11,12 +12,17 @@ export interface State {
   history: string[];
   p1Pieces: PieceInterface[];
   p2Pieces: PieceInterface[];
-  vez: "p1" | "p2";
+  turn: "p1" | "p2";
 }
 
 export interface Actions {
   type: "play" | "startupPlayer";
   payload: any;
+}
+
+export interface PlayPayload {
+  piece: PieceInterface;
+  place: { row: number; column: number };
 }
 
 const gameReducer = (state: State, action: Actions): State => {
@@ -26,31 +32,37 @@ const gameReducer = (state: State, action: Actions): State => {
         ...state,
         [action.payload.player + "Pieces"]: [
           {
+            id: `${action.payload.player}-1`,
             value: 1,
             player: action.payload.player,
             planet: action.payload.piece,
           },
           {
+            id: `${action.payload.player}-2`,
             value: 1,
             player: action.payload.player,
             planet: action.payload.piece,
           },
           {
+            id: `${action.payload.player}-3`,
             value: 2,
             player: action.payload.player,
             planet: action.payload.piece,
           },
           {
+            id: `${action.payload.player}-4`,
             value: 2,
             player: action.payload.player,
             planet: action.payload.piece,
           },
           {
+            id: `${action.payload.player}-5`,
             value: 3,
             player: action.payload.player,
             planet: action.payload.piece,
           },
           {
+            id: `${action.payload.player}-6`,
             value: 3,
             player: action.payload.player,
             planet: action.payload.piece,
@@ -58,6 +70,42 @@ const gameReducer = (state: State, action: Actions): State => {
         ],
       };
     case "play":
+      const {
+        piece,
+        place: { row, column },
+      } = action.payload as PlayPayload;
+      if (state.turn === piece.player) {
+        if (
+          !state.board[row][column] ||
+          Number(state.board[row][column]?.value) < piece.value
+        ) {
+          const newBoard = state.board.map((rowArray, r) =>
+            rowArray.map((actualPiece, c) => {
+              if (r === row && c === column) {
+                return piece;
+              }
+              return actualPiece;
+            })
+          );
+          const newPlayerPieces = state[
+            (piece.player + "Pieces") as keyof State
+          ] as PieceInterface[];
+          return {
+            ...state,
+            board: newBoard,
+            [piece.player + "Pieces"]: newPlayerPieces.filter(
+              (playerPiece) => playerPiece.id !== piece.id
+            ),
+            history: [
+              ...state.history,
+              `${piece.player}-${piece.value}=r${row}-c${column}`,
+            ],
+            turn: state.turn === "p1" ? "p2" : "p1",
+          };
+        }
+      }
+
+      return state;
     default:
       return state;
   }
@@ -74,5 +122,5 @@ export const INITIAL_STATE: State = {
   history: [],
   p1Pieces: [],
   p2Pieces: [],
-  vez: "p1",
+  turn: "p1",
 };

@@ -12,7 +12,7 @@ const SideBar: React.FC<SideBarProps> = ({ pieces }) => {
   return (
     <div className="sidebar-container">
       {pieces.map((piece, index) => (
-        <Piece key={index} piece={piece} />
+        <Piece key={piece.id} piece={piece} />
       ))}
     </div>
   );

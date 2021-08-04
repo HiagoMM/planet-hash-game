@@ -12,6 +12,7 @@ const MySwal = withReactContent(Swal);
 
 function App() {
   const [state, dispatch] = useReducer(gameReducer, INITIAL_STATE);
+
   const showSwal = async (title: string, selected?: number) => {
     const { value } = await MySwal.fire({
       title,
@@ -33,6 +34,7 @@ function App() {
     });
     return value;
   };
+
   useEffect(() => {
     const start = async () => {
       const planet1 = await showSwal("Player one piece");
@@ -52,7 +54,7 @@ function App() {
   return (
     <div className="container">
       <SideBar pieces={state.p1Pieces} />
-      <Board board={state.board} />
+      <Board board={state.board} dispatch={dispatch} />
       <SideBar pieces={state.p2Pieces} />
     </div>
   );

@@ -1,5 +1,5 @@
 import "./styles.scss";
-import React from "react";
+import React, { DragEvent } from "react";
 import { PieceInterface } from "../../reducers/game.reducer";
 
 import P1 from "../../assets/planet-1.png";
@@ -53,8 +53,19 @@ const Piece: React.FC<PieceProps> = ({ piece }) => {
     }
     return piece.player === "p1" ? P1 : P5;
   };
+
+  const handleDragStart = (ev: DragEvent<HTMLDivElement>) => {
+    console.log("start", piece);
+    ev.dataTransfer.setData("piece", JSON.stringify(piece));
+  };
+
+  const handleDrag = (ev: DragEvent<HTMLDivElement>) => {};
+
   return (
     <img
+      draggable
+      onDragStart={handleDragStart}
+      onDrag={handleDrag}
       alt={`Piece ${piece}`}
       className="piece"
       src={getSrc()}

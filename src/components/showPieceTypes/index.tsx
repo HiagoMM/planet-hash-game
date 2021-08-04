@@ -23,6 +23,7 @@ const ShowPieceTypes: React.FC<ShowPieceTypesProps> = ({ close, selected }) => {
           <img
             key={i}
             src={piece}
+            alt={`Piece ${i + 1}`}
             className="piece"
             onClick={() => (selected !== i ? close(i) : null)}
             data-black-white={selected === i}
